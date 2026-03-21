@@ -654,6 +654,146 @@
     padding: 4px 8px;
     display: inline-block;
   }
+
+  /* ADMIN */
+  .admin-btn {
+    background: var(--card);
+    border: 1.5px solid var(--border);
+    border-radius: 8px;
+    width: 42px;
+    height: 42px;
+    font-size: 18px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    transition: border-color 0.2s;
+  }
+
+  .admin-btn.active {
+    border-color: var(--accent);
+    background: rgba(245,166,35,0.15);
+  }
+
+  /* LOGIN OVERLAY */
+  .login-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.85);
+    z-index: 300;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s;
+  }
+
+  .login-overlay.open {
+    opacity: 1;
+    pointer-events: all;
+  }
+
+  .login-box {
+    background: var(--modal-bg);
+    border: 1.5px solid var(--border);
+    border-radius: 20px;
+    padding: 32px 28px;
+    width: 88%;
+    max-width: 340px;
+    text-align: center;
+    transform: scale(0.95);
+    transition: transform 0.2s;
+  }
+
+  .login-overlay.open .login-box {
+    transform: scale(1);
+  }
+
+  .login-icon {
+    font-size: 40px;
+    margin-bottom: 12px;
+  }
+
+  .login-title {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 800;
+    font-size: 24px;
+    color: var(--text);
+    margin-bottom: 6px;
+  }
+
+  .login-sub {
+    font-size: 14px;
+    color: var(--muted);
+    margin-bottom: 20px;
+  }
+
+  .login-input {
+    width: 100%;
+    background: var(--card);
+    border: 1.5px solid var(--border);
+    border-radius: 10px;
+    color: var(--text);
+    font-family: 'Barlow', sans-serif;
+    font-size: 18px;
+    padding: 13px 16px;
+    outline: none;
+    text-align: center;
+    letter-spacing: 3px;
+    margin-bottom: 14px;
+    transition: border-color 0.2s;
+  }
+
+  .login-input:focus { border-color: var(--accent); }
+
+  .login-input.error {
+    border-color: #ff6060;
+    animation: shake 0.3s ease;
+  }
+
+  @keyframes shake {
+    0%,100% { transform: translateX(0); }
+    25%      { transform: translateX(-8px); }
+    75%      { transform: translateX(8px); }
+  }
+
+  .login-btn {
+    width: 100%;
+    background: var(--accent);
+    color: #000;
+    border: none;
+    border-radius: 10px;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 800;
+    font-size: 20px;
+    padding: 14px;
+    cursor: pointer;
+    margin-bottom: 12px;
+  }
+
+  .login-cancel {
+    background: none;
+    border: none;
+    color: var(--muted);
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 16px;
+    cursor: pointer;
+    padding: 6px;
+  }
+
+  .admin-badge {
+    display: none;
+    background: var(--accent);
+    color: #000;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700;
+    font-size: 11px;
+    padding: 2px 8px;
+    border-radius: 10px;
+    letter-spacing: 0.5px;
+  }
 </style>
 </head>
 <body>
@@ -665,7 +805,8 @@
       <h1>Buscador SKU</h1>
       <span>Sistema de productos</span>
     </div>
-    <button class="add-btn" onclick="openAdd()">+ Nuevo</button>
+    <button class="add-btn" id="addBtn" onclick="openAdd()" style="display:none">+ Nuevo</button>
+    <button class="admin-btn" id="loginBtn" onclick="toggleAdmin()">🔒</button>
   </div>
   <div class="search-area">
     <div class="search-wrap">
@@ -711,7 +852,7 @@
     </div>
     <div class="visual-paleta" id="visualPaleta"></div>
     <div class="modal-divider"></div>
-    <div class="modal-actions">
+    <div class="modal-actions" id="adminActions" style="display:none">
       <button class="btn-edit" onclick="openEdit(currentIdx)">✏️ Editar producto</button>
       <button class="btn-delete" onclick="deleteProduct(currentIdx)">🗑️</button>
     </div>
@@ -756,12 +897,89 @@
 
 <div class="toast" id="toast"></div>
 
+<!-- LOGIN MODAL -->
+<div class="login-overlay" id="loginModal">
+  <div class="login-box">
+    <div class="login-icon" id="loginIcon">🔐</div>
+    <div class="login-title" id="loginTitle">Acceso Admin</div>
+    <div class="login-sub" id="loginSub">Ingresá la contraseña para editar</div>
+    <input class="login-input" id="loginInput" type="password" placeholder="••••••••"
+      onkeydown="if(event.key==='Enter') doLogin()">
+    <button class="login-btn" onclick="doLogin()">INGRESAR</button>
+    <button class="login-cancel" onclick="closeLogin()">Cancelar</button>
+  </div>
+</div>
+
 <script>
 // ---- SKU FORMATTING ----
 function formatSku(sku) {
   if (!sku || sku === 'NaN' || sku === 'nan') return '—';
   // Remove all dots (e.g. "352.0" → "352", "22.334" → "22334", "1.19" → "119")
   return String(sku).replace(/\./g, '');
+}
+
+// ---- ADMIN AUTH ----
+const ADMIN_PASS = 'cdmercado26';
+let isAdmin = false;
+
+function toggleAdmin() {
+  if (isAdmin) {
+    // Log out
+    isAdmin = false;
+    applyAdminUI();
+    showToast('🔒 Sesión cerrada');
+  } else {
+    // Show login
+    document.getElementById('loginInput').value = '';
+    document.getElementById('loginInput').classList.remove('error');
+    document.getElementById('loginIcon').textContent = '🔐';
+    document.getElementById('loginTitle').textContent = 'Acceso Admin';
+    document.getElementById('loginSub').textContent = 'Ingresá la contraseña para editar';
+    document.getElementById('loginModal').classList.add('open');
+    setTimeout(() => document.getElementById('loginInput').focus(), 200);
+  }
+}
+
+function doLogin() {
+  const val = document.getElementById('loginInput').value;
+  if (val === ADMIN_PASS) {
+    isAdmin = true;
+    document.getElementById('loginModal').classList.remove('open');
+    applyAdminUI();
+    showToast('✅ Modo administrador activo');
+  } else {
+    const inp = document.getElementById('loginInput');
+    inp.classList.add('error');
+    inp.value = '';
+    document.getElementById('loginIcon').textContent = '❌';
+    document.getElementById('loginSub').textContent = 'Contraseña incorrecta, intentá de nuevo';
+    setTimeout(() => {
+      inp.classList.remove('error');
+      document.getElementById('loginIcon').textContent = '🔐';
+      document.getElementById('loginSub').textContent = 'Ingresá la contraseña para editar';
+    }, 1500);
+  }
+}
+
+function closeLogin() {
+  document.getElementById('loginModal').classList.remove('open');
+}
+
+function applyAdminUI() {
+  const addBtn = document.getElementById('addBtn');
+  const loginBtn = document.getElementById('loginBtn');
+  const adminActions = document.getElementById('adminActions');
+  if (isAdmin) {
+    addBtn.style.display = 'flex';
+    loginBtn.textContent = '🔓';
+    loginBtn.classList.add('active');
+    if (adminActions) adminActions.style.display = 'flex';
+  } else {
+    addBtn.style.display = 'none';
+    loginBtn.textContent = '🔒';
+    loginBtn.classList.remove('active');
+    if (adminActions) adminActions.style.display = 'none';
+  }
 }
 
 // ---- DATA ----
@@ -1141,6 +1359,8 @@ function openDetail(idx) {
   }
 
   document.getElementById('detailModal').classList.add('open');
+  // Show edit/delete only if admin
+  document.getElementById('adminActions').style.display = isAdmin ? 'flex' : 'none';
 }
 
 function closeModal(e, id) {
