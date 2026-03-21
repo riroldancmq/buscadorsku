@@ -69,14 +69,14 @@
   .header-title h1 {
     font-family: 'Barlow Condensed', sans-serif;
     font-weight: 800;
-    font-size: 20px;
+    font-size: 26px;
     letter-spacing: 0.5px;
     line-height: 1;
     color: var(--text);
   }
 
   .header-title span {
-    font-size: 11px;
+    font-size: 13px;
     color: var(--muted);
     letter-spacing: 1px;
     text-transform: uppercase;
@@ -90,13 +90,7 @@
     padding: 8px 14px;
     font-family: 'Barlow Condensed', sans-serif;
     font-weight: 700;
-    font-size: 15px;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    gap: 5px;
-    flex-shrink: 0;
-    transition: background 0.2s, transform 0.1s;
+    font-size: 18px;
   }
 
   .add-btn:active { transform: scale(0.96); }
@@ -128,8 +122,8 @@
     border-radius: 10px;
     color: var(--text);
     font-family: 'Barlow', sans-serif;
-    font-size: 15px;
-    padding: 11px 40px 11px 38px;
+    font-size: 17px;
+    padding: 13px 44px 13px 42px;
     outline: none;
     transition: border-color 0.2s;
   }
@@ -171,12 +165,8 @@
     color: var(--muted);
     font-family: 'Barlow Condensed', sans-serif;
     font-weight: 600;
-    font-size: 13px;
-    padding: 5px 12px;
-    cursor: pointer;
-    white-space: nowrap;
-    transition: all 0.15s;
-    letter-spacing: 0.5px;
+    font-size: 15px;
+    padding: 7px 14px;
   }
 
   .filter-chip.active {
@@ -185,10 +175,46 @@
     color: #000;
   }
 
+  .filter-group-panel {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 7px;
+    padding: 10px 0 4px;
+    border-top: 1px solid var(--border);
+    margin-top: 4px;
+    animation: fadeIn 0.15s ease;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-4px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .filter-sub-chip {
+    background: var(--surface);
+    border: 1.5px solid var(--border);
+    border-radius: 20px;
+    color: var(--muted);
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 600;
+    font-size: 15px;
+    padding: 7px 14px;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: all 0.15s;
+  }
+
+  .filter-sub-chip.active,
+  .filter-sub-chip:active {
+    background: var(--chip-color, var(--accent));
+    border-color: var(--chip-color, var(--accent));
+    color: #000;
+  }
+
   /* RESULTS COUNT */
   .results-bar {
     padding: 10px 16px;
-    font-size: 12px;
+    font-size: 14px;
     color: var(--muted);
     letter-spacing: 0.5px;
     text-transform: uppercase;
@@ -239,7 +265,7 @@
   }
 
   .card-sku .sku-label {
-    font-size: 11px;
+    font-size: 13px;
     color: var(--muted);
     letter-spacing: 1px;
     text-transform: uppercase;
@@ -249,7 +275,7 @@
   .card-sku .sku-val {
     font-family: 'Barlow Condensed', sans-serif;
     font-weight: 800;
-    font-size: 22px;
+    font-size: 28px;
     color: var(--accent);
     line-height: 1.2;
   }
@@ -262,9 +288,9 @@
   .card-desc {
     font-family: 'Barlow Condensed', sans-serif;
     font-weight: 700;
-    font-size: 16px;
+    font-size: 20px;
     line-height: 1.2;
-    margin-bottom: 6px;
+    margin-bottom: 8px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -272,15 +298,15 @@
 
   .card-pills {
     display: flex;
-    gap: 5px;
+    gap: 6px;
     flex-wrap: wrap;
   }
 
   .pill {
     background: var(--surface);
     border-radius: 5px;
-    padding: 2px 7px;
-    font-size: 11px;
+    padding: 3px 9px;
+    font-size: 13px;
     font-family: 'Barlow Condensed', sans-serif;
     font-weight: 600;
     color: var(--muted);
@@ -291,7 +317,7 @@
 
   .pill .val {
     color: var(--green);
-    font-size: 13px;
+    font-size: 15px;
   }
 
   .card-arrow {
@@ -374,8 +400,8 @@
     color: #000;
     font-family: 'Barlow Condensed', sans-serif;
     font-weight: 800;
-    font-size: 20px;
-    padding: 5px 14px;
+    font-size: 24px;
+    padding: 6px 16px;
     border-radius: 8px;
     letter-spacing: 0.5px;
   }
@@ -399,7 +425,7 @@
     padding: 12px 20px 0;
     font-family: 'Barlow Condensed', sans-serif;
     font-weight: 800;
-    font-size: 26px;
+    font-size: 32px;
     line-height: 1.1;
     color: var(--text);
   }
@@ -413,7 +439,7 @@
   .modal-section-title {
     font-family: 'Barlow Condensed', sans-serif;
     font-weight: 700;
-    font-size: 12px;
+    font-size: 14px;
     letter-spacing: 2px;
     text-transform: uppercase;
     color: var(--muted);
@@ -443,10 +469,10 @@
   .stat-val {
     font-family: 'Barlow Condensed', sans-serif;
     font-weight: 800;
-    font-size: 32px;
+    font-size: 40px;
     line-height: 1;
     color: var(--green);
-    margin-bottom: 4px;
+    margin-bottom: 6px;
   }
 
   .stat-card.highlight .stat-val {
@@ -454,7 +480,7 @@
   }
 
   .stat-lbl {
-    font-size: 10px;
+    font-size: 13px;
     color: var(--muted);
     letter-spacing: 0.5px;
     text-transform: uppercase;
@@ -490,13 +516,13 @@
     align-items: center;
     gap: 8px;
     font-family: 'Barlow Condensed', sans-serif;
-    font-size: 13px;
+    font-size: 15px;
     color: var(--muted);
   }
 
   .paleta-legend-dot {
-    width: 10px;
-    height: 10px;
+    width: 12px;
+    height: 12px;
     border-radius: 2px;
     flex-shrink: 0;
   }
@@ -504,7 +530,7 @@
   .paleta-legend-val {
     color: var(--text);
     font-weight: 700;
-    font-size: 15px;
+    font-size: 20px;
   }
 
   .modal-actions {
@@ -521,8 +547,8 @@
     color: var(--text);
     font-family: 'Barlow Condensed', sans-serif;
     font-weight: 700;
-    font-size: 16px;
-    padding: 12px;
+    font-size: 19px;
+    padding: 14px;
     cursor: pointer;
     transition: border-color 0.2s;
   }
@@ -536,8 +562,8 @@
     color: #ff6060;
     font-family: 'Barlow Condensed', sans-serif;
     font-weight: 700;
-    font-size: 16px;
-    padding: 12px 18px;
+    font-size: 19px;
+    padding: 14px 20px;
     cursor: pointer;
   }
 
@@ -550,7 +576,7 @@
     display: block;
     font-family: 'Barlow Condensed', sans-serif;
     font-weight: 700;
-    font-size: 12px;
+    font-size: 14px;
     letter-spacing: 1.5px;
     text-transform: uppercase;
     color: var(--muted);
@@ -564,8 +590,8 @@
     border-radius: 10px;
     color: var(--text);
     font-family: 'Barlow', sans-serif;
-    font-size: 15px;
-    padding: 11px 14px;
+    font-size: 17px;
+    padding: 13px 14px;
     outline: none;
     transition: border-color 0.2s;
   }
@@ -592,8 +618,8 @@
     border-radius: 10px;
     font-family: 'Barlow Condensed', sans-serif;
     font-weight: 800;
-    font-size: 18px;
-    padding: 14px;
+    font-size: 22px;
+    padding: 16px;
     cursor: pointer;
     letter-spacing: 0.5px;
     transition: background 0.2s;
@@ -608,8 +634,8 @@
     color: #000;
     font-family: 'Barlow Condensed', sans-serif;
     font-weight: 700;
-    font-size: 15px;
-    padding: 10px 22px;
+    font-size: 17px;
+    padding: 12px 26px;
     border-radius: 100px;
     z-index: 999;
     transition: transform 0.3s;
@@ -653,7 +679,7 @@
 
 <div class="results-bar">
   <span id="resultsText">Cargando...</span>
-  <span style="color:var(--muted);font-size:11px">SKU BÚSQUEDA</span>
+  <span style="color:var(--muted);font-size:13px">SKU BÚSQUEDA</span>
 </div>
 
 <div class="list" id="list"></div>
@@ -756,31 +782,184 @@ function saveData() {
 let db = loadData();
 
 // Extract brand keywords from descriptions for filter chips
-const BRANDS = ['PEPSI','7UP','BRAHMA','QUILMES','GLACIAR','GATORADE','MIRINDA','STELLA','CORONA','HEINEKEN','FANTA','SPRITE','COCA','MANZ','AGUA'];
+const FILTER_GROUPS = [
+  {
+    label: 'CERVEZAS',
+    color: '#f5a623',
+    brands: [
+      { label: 'Quilmes',    key: 'QUILMES' },
+      { label: 'Brahma',     key: 'BRAHMA' },
+      { label: 'Stella',     key: 'STELLA' },
+      { label: 'Patagonia',  key: 'PATAGONIA' },
+      { label: 'Andes',      key: 'ANDES' },
+      { label: 'Budweiser',  key: 'BUDWEISER' },
+      { label: 'Corona',     key: 'CORONA' },
+      { label: 'Temple',     key: 'TEMPLE' },
+      { label: 'Goose',      key: 'GOOSE' },
+      { label: 'Leffe',      key: 'LEFFE' },
+      { label: 'Franziskaner', key: 'FRANZISK' },
+      { label: 'Hoegaarden', key: 'HOEGAARD' },
+    ]
+  },
+  {
+    label: 'GASEOSAS',
+    color: '#2dd4a0',
+    brands: [
+      { label: 'Pepsi',    key: 'PEPSI' },
+      { label: '7UP',      key: '7UP' },
+      { label: 'Mirinda',  key: 'MIRINDA' },
+      { label: 'H2OH',     key: 'H2OH' },
+      { label: 'Guaraná',  key: 'GUAR' },
+      { label: 'Tónica',   key: 'TONIC' },
+    ]
+  },
+  {
+    label: 'AGUA / HIDRA',
+    color: '#60c9f5',
+    brands: [
+      { label: 'Glaciar',   key: 'GLACIAR' },
+      { label: 'Eco',       key: 'ECO' },
+      { label: 'NPV',       key: 'NPV' },
+      { label: 'Gatorade',  key: 'GATORADE' },
+      { label: 'Rockstar',  key: 'ROCKSTAR' },
+      { label: 'Red Bull',  key: 'RED BULL' },
+      { label: 'Nestlé',    key: 'NESTLE' },
+    ]
+  },
+  {
+    label: 'SIDRA / VINO',
+    color: '#d97aff',
+    brands: [
+      { label: 'Sidra 1930', key: '1930' },
+      { label: 'Del Valle',  key: 'DEL VALLE' },
+      { label: 'Malbec',     key: 'MALBEC' },
+      { label: 'Dante',      key: 'DANTE' },
+      { label: 'Novecento',  key: 'NOVECENTO' },
+      { label: 'Robino',     key: 'ROBINO' },
+      { label: 'Mikes Hard', key: 'MIKE' },
+      { label: 'Striptiz',   key: 'STRIPTIZ' },
+    ]
+  },
+  {
+    label: 'ESPIRITUOSOS',
+    color: '#ff9060',
+    brands: [
+      { label: 'Gin Bosque', key: 'BOSQUE' },
+      { label: 'Vodka',      key: 'VODKA' },
+      { label: 'Fernet',     key: 'FERNET' },
+      { label: 'Campari',    key: 'CAMPARI' },
+      { label: 'Aperol',     key: 'APEROL' },
+      { label: 'Jäger',      key: 'JAGER' },
+      { label: 'Martini',    key: 'MARTINI' },
+    ]
+  },
+  {
+    label: 'ALIMENTOS',
+    color: '#ffd460',
+    brands: [
+      { label: 'Yerba',      key: 'YERBA' },
+      { label: 'Taragüi',    key: 'TARAGUI' },
+      { label: 'Playadito',  key: 'PLAYADITO' },
+      { label: 'Mate',       key: 'MATE' },
+      { label: 'Café',       key: 'CAFE' },
+      { label: 'Leche',      key: 'LECHE' },
+      { label: 'Jugo',       key: 'JUGO' },
+      { label: 'Pringles',   key: 'PRINGLES' },
+      { label: 'Nesquik',    key: 'NESQUIK' },
+      { label: 'Morixe',     key: 'MORIXE' },
+      { label: 'Arroz',      key: 'ARROZ' },
+    ]
+  },
+];
 
 // ---- STATE ----
 let query = '';
-let activeFilter = 'TODOS';
+let activeFilter = 'TODOS'; // holds the key string
+let activeGroup = null;     // holds the group label
 let currentIdx = -1;
 let editIdx = -1;
 let filtered = [];
 
-// ---- INIT ----
-const filters = ['TODOS', ...BRANDS];
+// ---- BUILD FILTER UI ----
 const filterRow = document.getElementById('filterRow');
-filters.forEach(b => {
-  const chip = document.createElement('button');
-  chip.className = 'filter-chip' + (b === 'TODOS' ? ' active' : '');
-  chip.textContent = b;
-  chip.onclick = () => setFilter(b, chip);
-  filterRow.appendChild(chip);
-});
 
-function setFilter(name, el) {
-  activeFilter = name;
-  document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
-  el.classList.add('active');
-  render();
+function buildFilters() {
+  filterRow.innerHTML = '';
+
+  // TODOS chip
+  const todosChip = document.createElement('button');
+  todosChip.className = 'filter-chip active';
+  todosChip.textContent = 'TODOS';
+  todosChip.onclick = () => {
+    activeFilter = 'TODOS';
+    activeGroup = null;
+    document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
+    document.querySelectorAll('.filter-group-panel').forEach(p => p.remove());
+    todosChip.classList.add('active');
+    render();
+  };
+  filterRow.appendChild(todosChip);
+
+  // Group chips
+  FILTER_GROUPS.forEach(group => {
+    const groupChip = document.createElement('button');
+    groupChip.className = 'filter-chip filter-group-chip';
+    groupChip.textContent = group.label;
+    groupChip.style.borderColor = group.color + '55';
+    groupChip.style.color = group.color;
+    groupChip.dataset.group = group.label;
+
+    groupChip.onclick = () => {
+      const isOpen = activeGroup === group.label;
+      // Close any open panel
+      document.querySelectorAll('.filter-group-panel').forEach(p => p.remove());
+      document.querySelectorAll('.filter-group-chip').forEach(c => {
+        c.classList.remove('active');
+        c.style.background = '';
+      });
+
+      if (isOpen) {
+        // Toggle off
+        activeGroup = null;
+        activeFilter = 'TODOS';
+        document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
+        todosChip.classList.add('active');
+        render();
+        return;
+      }
+
+      activeGroup = group.label;
+      groupChip.classList.add('active');
+      groupChip.style.background = group.color + '22';
+
+      // Build sub-chip panel
+      const panel = document.createElement('div');
+      panel.className = 'filter-group-panel';
+      panel.style.borderColor = group.color + '44';
+
+      group.brands.forEach(brand => {
+        const chip = document.createElement('button');
+        chip.className = 'filter-sub-chip';
+        chip.textContent = brand.label;
+        chip.style.setProperty('--chip-color', group.color);
+        if (activeFilter === brand.key) chip.classList.add('active');
+
+        chip.onclick = (e) => {
+          e.stopPropagation();
+          activeFilter = brand.key;
+          panel.querySelectorAll('.filter-sub-chip').forEach(c => c.classList.remove('active'));
+          chip.classList.add('active');
+          render();
+        };
+        panel.appendChild(chip);
+      });
+
+      filterRow.parentElement.insertBefore(panel, filterRow.nextSibling);
+      render();
+    };
+
+    filterRow.appendChild(groupChip);
+  });
 }
 
 function onSearch() {
@@ -798,13 +977,12 @@ function clearSearch() {
 
 function render() {
   const q = query.toLowerCase().trim();
-  const filt = activeFilter;
 
   filtered = db.filter(p => {
     const desc = (p.desc || '').toUpperCase();
     const sku = formatSku(p.sku || '');
     const matchQ = !q || desc.toLowerCase().includes(q) || sku.includes(q);
-    const matchF = filt === 'TODOS' || desc.includes(filt);
+    const matchF = activeFilter === 'TODOS' || desc.includes(activeFilter);
     return matchQ && matchF;
   });
 
@@ -938,21 +1116,21 @@ function openDetail(idx) {
           <div class="paleta-legend-item">
             <div class="paleta-legend-dot" style="background:${colors.boxFront}"></div>
             <div>
-              <div style="font-size:11px">Pisos</div>
+              <div style="font-size:14px">Pisos</div>
               <div class="paleta-legend-val">${pisos}</div>
             </div>
           </div>
           ${p.packsPiso ? `<div class="paleta-legend-item">
             <div class="paleta-legend-dot" style="background:var(--green)"></div>
             <div>
-              <div style="font-size:11px">Bultos/piso</div>
+              <div style="font-size:14px">Bultos/piso</div>
               <div class="paleta-legend-val">${p.packsPiso}</div>
             </div>
           </div>` : ''}
           ${p.packsPaleta ? `<div class="paleta-legend-item">
             <div class="paleta-legend-dot" style="background:var(--accent)"></div>
             <div>
-              <div style="font-size:11px">Total paleta</div>
+              <div style="font-size:14px">Total paleta</div>
               <div class="paleta-legend-val">${p.packsPaleta}</div>
             </div>
           </div>` : ''}
@@ -1048,6 +1226,7 @@ function showToast(msg) {
 }
 
 // ---- INITIAL RENDER ----
+buildFilters();
 render();
 </script>
 </body>
