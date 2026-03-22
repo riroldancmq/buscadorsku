@@ -1010,7 +1010,8 @@ function applyAdminUI() {
 // ---- BASE DE DATOS INTERNA ----
 const STORAGE_KEY  = 'catalogo_sku_v2';
 const JSONBIN_ID   = '69bf644baa77b81da9086200';
-const JSONBIN_KEY  = '$2a$10$tit7qxUlpR4R7dlFYj7wDuvsOXutJkmP.uIyvv2UxF0xhOieBXg2C';
+const JSONBIN_KEY  = '$2a$10$pn7Jp.UUgzgT4/.LICuTMOVTruAuJCiyfcsdoHhLuaDXcHFJBgMuO';
+const JSONBIN_HEADER = 'X-Access-Key';
 const JSONBIN_URL  = `https://api.jsonbin.io/v3/b/${JSONBIN_ID}`;
 
 // Datos base embebidos (respaldo si JSONBin no responde)
@@ -1033,7 +1034,7 @@ async function iniciarApp() {
   // Actualizar desde JSONBin en segundo plano
   try {
     const resp = await fetch(JSONBIN_URL + '/latest', {
-      headers: { 'X-Master-Key': JSONBIN_KEY }
+      headers: { 'X-Access-Key': JSONBIN_KEY }
     });
     if (!resp.ok) throw new Error('JSONBin status ' + resp.status);
     const data = await resp.json();
@@ -1055,7 +1056,7 @@ async function iniciarApp() {
 async function subirAJSONBin(datos) {
   const resp = await fetch(JSONBIN_URL, {
     method: 'PUT',
-    headers: { 'Content-Type': 'application/json', 'X-Master-Key': JSONBIN_KEY },
+    headers: { 'Content-Type': 'application/json', 'X-Access-Key': JSONBIN_KEY },
     body: JSON.stringify(datos)
   });
   if (!resp.ok) throw new Error('Error guardando: ' + resp.status);
@@ -1063,15 +1064,29 @@ async function subirAJSONBin(datos) {
 }
 
 async function saveData() {
+  // Guardar localmente siempre
   try { localStorage.setItem(STORAGE_KEY, JSON.stringify(db)); } catch(e) {}
   if (!isAdmin) return;
   try {
     showToast('💾 Guardando en la nube...');
-    await subirAJSONBin(db);
-    showToast('✅ Guardado — todos verán los cambios');
+    const resp = await fetch(JSONBIN_URL, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-Access-Key': JSONBIN_KEY,
+        'X-Bin-Versioning': 'false'
+      },
+      body: JSON.stringify(db)
+    });
+    const text = await resp.text();
+    console.log('JSONBin respuesta:', resp.status, text.substring(0, 200));
+    if (!resp.ok) {
+      throw new Error(`Error ${resp.status}: ${text.substring(0, 100)}`);
+    }
+    showToast('✅ Guardado en la nube correctamente');
   } catch(err) {
-    console.warn('Error en JSONBin:', err.message);
-    showToast('⚠️ Guardado solo en este dispositivo');
+    console.error('Error guardando en JSONBin:', err);
+    showToast('⚠️ Solo guardado local. Error: ' + err.message.substring(0, 50));
   }
 }
 
@@ -1104,11 +1119,11 @@ const FILTER_GROUPS = [
       { label: 'Mirinda',  key: 'MIRINDA' },
       { label: 'H2OH',     key: 'H2OH' },
       { label: 'Guaraná',  key: 'GUAR' },
-      { label: 'Tónica',   key: 'TONIC' },
+      { label: 'PDT',   key: 'PDT' },
     ]
   },
   {
-    label: 'AGUA / HIDRA',
+    label: 'AGUA',
     color: '#60c9f5',
     brands: [
       { label: 'Glaciar',   key: 'GLACIAR' },
@@ -1121,7 +1136,7 @@ const FILTER_GROUPS = [
     ]
   },
   {
-    label: 'SIDRA / VINO',
+    label: 'VINO',
     color: '#d97aff',
     brands: [
       { label: 'Sidra 1930', key: '1930' },
@@ -1135,7 +1150,7 @@ const FILTER_GROUPS = [
     ]
   },
   {
-    label: 'ESPIRITUOSOS',
+    label: 'SPIRIT',
     color: '#ff9060',
     brands: [
       { label: 'Gin Bosque', key: 'BOSQUE' },
@@ -1494,18 +1509,15 @@ async function saveProduct() {
 
   if (editIdx >= 0) {
     db[editIdx] = { sku, desc, pisos, packsPiso, packsPaleta };
-    await saveData();
     showToast('✅ Producto actualizado');
   } else {
     if (db.find(p => p.sku === sku)) { showToast('⚠️ Ya existe ese SKU'); return; }
     db.unshift({ sku, desc, pisos, packsPiso, packsPaleta });
-    await saveData();
     showToast('✅ Producto agregado');
   }
-  saveData();
   closeModalById('formModal');
   render();
-}
+  await saveData();
 
 async function deleteProduct(idx) {
   if (!confirm('¿Eliminar este producto?')) return;
