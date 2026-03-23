@@ -1065,11 +1065,11 @@ const FILTER_GROUPS = [
       { label: 'Mirinda',  key: 'MIRINDA' },
       { label: 'H2OH',     key: 'H2OH' },
       { label: 'Guaraná',  key: 'GUAR' },
-      { label: 'PDT',   key: 'PDT' },
+      { label: 'Tónica',   key: 'TONIC' },
     ]
   },
   {
-    label: 'AGUA',
+    label: 'AGUA / HIDRA',
     color: '#60c9f5',
     brands: [
       { label: 'Glaciar',   key: 'GLACIAR' },
@@ -1082,7 +1082,7 @@ const FILTER_GROUPS = [
     ]
   },
   {
-    label: 'VINO',
+    label: 'SIDRA / VINO',
     color: '#d97aff',
     brands: [
       { label: 'Sidra 1930', key: '1930' },
@@ -1096,7 +1096,7 @@ const FILTER_GROUPS = [
     ]
   },
   {
-    label: 'SPIRIT',
+    label: 'ESPIRITUOSOS',
     color: '#ff9060',
     brands: [
       { label: 'Gin Bosque', key: 'BOSQUE' },
@@ -1117,7 +1117,6 @@ const FILTER_GROUPS = [
       { label: 'Playadito',  key: 'PLAYADITO' },
       { label: 'Mate',       key: 'MATE' },
       { label: 'Café',       key: 'CAFE' },
-      { label: 'Harina',       key: 'HARINA' },
       { label: 'Leche',      key: 'LECHE' },
       { label: 'Jugo',       key: 'JUGO' },
       { label: 'Pringles',   key: 'PRINGLES' },
@@ -1493,34 +1492,6 @@ function exportarJSON() {
   link.click();
   URL.revokeObjectURL(url);
   showToast('✅ productos.json descargado — subilo a GitHub para sincronizar');
-}
-  // Encabezados de la tabla
-  const headers = ['SKU', 'Descripcion', 'PisosPorPaleta', 'PacksPorPiso', 'PacksPorPaleta'];
-
-  // Convertir cada producto a una fila CSV
-  const rows = db
-    .filter(p => p.sku && p.sku !== 'NaN' && p.desc !== 'nan')
-    .map(p => [
-      formatSku(p.sku),
-      '"' + (p.desc || '').replace(/"/g, '""') + '"',
-      p.pisos != null ? p.pisos : '',
-      p.packsPiso != null ? p.packsPiso : '',
-      p.packsPaleta != null ? p.packsPaleta : ''
-    ].join(','));
-
-  // Armar el contenido del archivo
-  const csvContent = [headers.join(','), ...rows].join('\n');
-
-  // Crear el archivo y descargarlo
-  const blob = new Blob(['\uFEFF' + csvContent], { type: 'text/csv;charset=utf-8;' });
-  const url = URL.createObjectURL(blob);
-  const link = document.createElement('a');
-  const fecha = new Date().toISOString().slice(0, 10);
-  link.href = url;
-  link.download = 'productos_sku_' + fecha + '.csv';
-  link.click();
-  URL.revokeObjectURL(url);
-  showToast('✅ CSV exportado correctamente');
 }
 
 // ---- INICIO DE LA APLICACIÓN ----
