@@ -806,6 +806,7 @@
       <span>Sistema de productos</span>
     </div>
     <button class="add-btn" id="addBtn" onclick="openAdd()" style="display:none">+ Nuevo</button>
+    <button class="add-btn" id="filtrosBtn" onclick="openFiltros()" style="display:none;background:#378add;font-size:14px;padding:8px 12px">⚙ Filtros</button>
     <button class="admin-btn" id="loginBtn" onclick="toggleAdmin()">🔒</button>
   </div>
   <div class="search-area">
@@ -910,6 +911,23 @@
   </div>
 </div>
 
+<!-- MODAL GESTOR DE FILTROS -->
+<div class="modal-overlay" id="filtrosModal" onclick="closeModal(event,'filtrosModal')">
+  <div class="modal" style="max-height:92vh">
+    <div class="modal-handle"></div>
+    <div class="modal-header">
+      <span class="modal-sku-badge">⚙ GESTIÓN DE FILTROS</span>
+      <button class="modal-close" onclick="closeModalById('filtrosModal')">✕</button>
+    </div>
+    <div style="padding:0 20px 20px">
+      <div id="filtrosLista" style="margin-top:16px"></div>
+      <button onclick="agregarGrupo()" style="width:100%;margin-top:8px;background:rgba(245,166,35,0.1);border:1.5px dashed rgba(245,166,35,0.4);border-radius:10px;color:#f5a623;font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:17px;padding:13px;cursor:pointer">+ Agregar grupo nuevo</button>
+      <button onclick="guardarFiltros()" style="width:100%;margin-top:10px;background:#2dd4a0;border:none;border-radius:10px;color:#000;font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:19px;padding:14px;cursor:pointer">Guardar cambios</button>
+      <p style="text-align:center;font-size:12px;color:#7878a0;margin-top:8px">Los cambios quedan en esta sesion. Exporta el JSON desde el header cuando estes listo.</p>
+    </div>
+  </div>
+</div>
+
 <script>
 // ---- FORMATO DEL CÓDIGO SKU ----
 function formatSku(sku) {
@@ -968,13 +986,14 @@ function closeLogin() {
 function applyAdminUI() {
   const addBtn = document.getElementById('addBtn');
   const loginBtn = document.getElementById('loginBtn');
+  const filtrosBtn = document.getElementById('filtrosBtn');
   const adminActions = document.getElementById('adminActions');
   if (isAdmin) {
     addBtn.style.display = 'flex';
+    filtrosBtn.style.display = 'flex';
     loginBtn.textContent = '🔓';
     loginBtn.classList.add('active');
     if (adminActions) adminActions.style.display = 'flex';
-    // Mostrar botón exportar
     let expBtn = document.getElementById('exportBtn');
     if (!expBtn) {
       expBtn = document.createElement('button');
@@ -988,6 +1007,7 @@ function applyAdminUI() {
     expBtn.style.display = 'flex';
   } else {
     addBtn.style.display = 'none';
+    filtrosBtn.style.display = 'none';
     loginBtn.textContent = '🔒';
     loginBtn.classList.remove('active');
     if (adminActions) adminActions.style.display = 'none';
@@ -1001,7 +1021,8 @@ const STORAGE_KEY = 'catalogo_sku_v2';
 
 // ---- EXPORTAR JSON ----
 function exportarJSON() {
-  const json = JSON.stringify(db, null, 2);
+  const data = { filters: FILTER_GROUPS, products: db };
+  const json = JSON.stringify(data, null, 2);
   const blob = new Blob([json], { type: 'application/json' });
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
@@ -1032,15 +1053,19 @@ let db = [];
 
 async function initDB() {
   try {
-    const res = await fetch('productos.json?_=' + Date.now()); // evita caché del browser
+    const res = await fetch('productos.json?_=' + Date.now());
     if (res.ok) {
-      db = await res.json();
+      const data = await res.json();
+      if (data.products && data.filters) {
+        db = data.products;
+        FILTER_GROUPS = data.filters;
+      } else {
+        db = Array.isArray(data) ? data : loadData();
+      }
     } else {
-      // Si el servidor responde pero con error, caer a localStorage/defaults
       db = loadData();
     }
   } catch(e) {
-    // Sin conexión: usar localStorage como fallback offline
     db = loadData();
   }
   buildFilters();
@@ -1050,7 +1075,7 @@ async function initDB() {
 initDB();
 
 // Palabras clave por marca para los filtros
-const FILTER_GROUPS = [
+let FILTER_GROUPS = [
   {
     label: 'CERVEZAS',
     color: '#f5a623',
@@ -1078,7 +1103,7 @@ const FILTER_GROUPS = [
       { label: 'Mirinda',  key: 'MIRINDA' },
       { label: 'H2OH',     key: 'H2OH' },
       { label: 'Guaraná',  key: 'GUAR' },
-      { label: 'PDT',   key: 'PDT' },
+      { label: 'Tónica',   key: 'TONIC' },
     ]
   },
   {
@@ -1493,6 +1518,176 @@ function showToast(msg) {
   t.textContent = msg;
   t.classList.add('show');
   setTimeout(() => t.classList.remove('show'), 2500);
+}
+
+// ---- GESTOR DE FILTROS ----
+function openFiltros() {
+  renderFiltrosPanel();
+  document.getElementById('filtrosModal').classList.add('open');
+}
+
+function renderFiltrosPanel() {
+  const lista = document.getElementById('filtrosLista');
+  lista.innerHTML = '';
+
+  FILTER_GROUPS.forEach((grupo, gi) => {
+    const card = document.createElement('div');
+    card.dataset.gi = gi;
+    card.style.cssText = 'background:#22222f;border:1.5px solid #2e2e42;border-radius:12px;margin-bottom:10px;overflow:hidden';
+
+    // --- Cabecera del grupo ---
+    const header = document.createElement('div');
+    header.style.cssText = 'display:flex;align-items:center;gap:8px;padding:11px 14px';
+
+    // Swatch: div coloreado sobre input color oculto
+    const swatchWrap = document.createElement('div');
+    swatchWrap.style.cssText = 'position:relative;width:28px;height:28px;flex-shrink:0;cursor:pointer';
+    const swatchDiv = document.createElement('div');
+    swatchDiv.style.cssText = 'width:28px;height:28px;border-radius:7px;background:'+grupo.color+';border:2.5px solid rgba(255,255,255,0.18);pointer-events:none';
+    const colorPicker = document.createElement('input');
+    colorPicker.type = 'color';
+    colorPicker.value = grupo.color;
+    colorPicker.dataset.field = 'color';
+    colorPicker.style.cssText = 'position:absolute;inset:0;opacity:0;width:100%;height:100%;cursor:pointer;border:none;padding:0';
+    colorPicker.oninput = e => { swatchDiv.style.background = e.target.value; };
+    swatchWrap.appendChild(swatchDiv);
+    swatchWrap.appendChild(colorPicker);
+
+    const nombreInput = document.createElement('input');
+    nombreInput.value = grupo.label;
+    nombreInput.dataset.field = 'label';
+    nombreInput.style.cssText = 'flex:1;background:#1a1a24;border:1.5px solid #3e3e52;border-radius:7px;color:#e8e8f0;font-family:"Barlow Condensed",sans-serif;font-weight:700;font-size:15px;padding:5px 9px;outline:none;min-width:0';
+
+    const count = document.createElement('span');
+    count.textContent = grupo.brands.length + ' marcas';
+    count.style.cssText = 'font-size:11px;color:#7878a0;background:#1a1a24;border-radius:5px;padding:2px 7px;flex-shrink:0';
+
+    const btnDel = document.createElement('button');
+    btnDel.textContent = '🗑';
+    btnDel.title = 'Eliminar grupo';
+    btnDel.style.cssText = 'background:rgba(255,96,96,0.12);border:1.5px solid rgba(255,96,96,0.3);border-radius:7px;color:#ff6060;cursor:pointer;font-size:14px;padding:5px 8px;flex-shrink:0';
+    btnDel.onclick = () => {
+      const idx = parseInt(card.dataset.gi);
+      if (!confirm('¿Eliminar el grupo "' + FILTER_GROUPS[idx].label + '"?')) return;
+      FILTER_GROUPS.splice(idx, 1);
+      buildFilters();
+      render();
+      renderFiltrosPanel();
+    };
+
+    header.appendChild(swatchWrap);
+    header.appendChild(nombreInput);
+    header.appendChild(count);
+    header.appendChild(btnDel);
+
+    // --- Sub-filtros ---
+    const body = document.createElement('div');
+    body.style.cssText = 'padding:0 14px 12px;display:flex;flex-direction:column;gap:5px';
+
+    grupo.brands.forEach((brand, bi) => {
+      const row = document.createElement('div');
+      row.dataset.bi = bi;
+      row.style.cssText = 'display:flex;align-items:center;gap:6px;background:#1a1a24;border-radius:7px;padding:6px 9px';
+
+      const keyInp = document.createElement('input');
+      keyInp.value = brand.key;
+      keyInp.dataset.field = 'key';
+      keyInp.placeholder = 'CLAVE';
+      keyInp.style.cssText = 'width:90px;background:#22222f;border:1.5px solid #3e3e52;border-radius:5px;color:#7878a0;font-family:monospace;font-size:11px;padding:3px 6px;outline:none;flex-shrink:0';
+
+      const labelInp = document.createElement('input');
+      labelInp.value = brand.label;
+      labelInp.dataset.field = 'brandLabel';
+      labelInp.placeholder = 'Etiqueta';
+      labelInp.style.cssText = 'flex:1;background:#22222f;border:1.5px solid #3e3e52;border-radius:5px;color:#e8e8f0;font-size:13px;padding:3px 7px;outline:none;min-width:0';
+
+      const btnDelB = document.createElement('button');
+      btnDelB.textContent = '✕';
+      btnDelB.style.cssText = 'background:rgba(255,96,96,0.12);border:1.5px solid rgba(255,96,96,0.3);border-radius:6px;color:#ff6060;cursor:pointer;font-size:13px;padding:4px 8px;flex-shrink:0';
+      btnDelB.onclick = () => {
+        const gIdx = parseInt(card.dataset.gi);
+        const bIdx = parseInt(row.dataset.bi);
+        FILTER_GROUPS[gIdx].brands.splice(bIdx, 1);
+        buildFilters();
+        render();
+        renderFiltrosPanel();
+      };
+
+      row.appendChild(keyInp);
+      row.appendChild(labelInp);
+      row.appendChild(btnDelB);
+      body.appendChild(row);
+    });
+
+    // --- Fila agregar sub-filtro ---
+    const addRow = document.createElement('div');
+    addRow.style.cssText = 'display:flex;gap:6px;margin-top:4px';
+
+    const newKey = document.createElement('input');
+    newKey.placeholder = 'CLAVE';
+    newKey.style.cssText = 'width:90px;background:#1a1a24;border:1.5px solid #3e3e52;border-radius:7px;color:#e8e8f0;font-size:12px;padding:6px 8px;outline:none;flex-shrink:0;text-transform:uppercase';
+
+    const newLabel = document.createElement('input');
+    newLabel.placeholder = 'Etiqueta (ej: Corona)';
+    newLabel.style.cssText = 'flex:1;background:#1a1a24;border:1.5px solid #3e3e52;border-radius:7px;color:#e8e8f0;font-size:12px;padding:6px 8px;outline:none;min-width:0';
+
+    const btnAdd = document.createElement('button');
+    btnAdd.textContent = '+ Add';
+    btnAdd.style.cssText = 'background:#2dd4a0;border:none;border-radius:7px;color:#000;font-family:"Barlow Condensed",sans-serif;font-weight:700;font-size:13px;padding:6px 11px;cursor:pointer;flex-shrink:0';
+    btnAdd.onclick = () => {
+      const k = newKey.value.trim().toUpperCase();
+      const l = newLabel.value.trim();
+      if (!k || !l) { showToast('⚠️ Completá clave y etiqueta'); return; }
+      const gIdx = parseInt(card.dataset.gi);
+      FILTER_GROUPS[gIdx].brands.push({ key: k, label: l });
+      buildFilters();
+      render();
+      renderFiltrosPanel();
+      showToast('✅ Sub-filtro agregado');
+    };
+
+    addRow.appendChild(newKey);
+    addRow.appendChild(newLabel);
+    addRow.appendChild(btnAdd);
+    body.appendChild(addRow);
+
+    card.appendChild(header);
+    card.appendChild(body);
+    lista.appendChild(card);
+  });
+}
+
+function guardarFiltros() {
+  // Leer todos los valores actuales de los inputs del panel
+  const lista = document.getElementById('filtrosLista');
+  const cards = lista.querySelectorAll('[data-gi]');
+  cards.forEach(card => {
+    const gi = parseInt(card.dataset.gi);
+    if (!FILTER_GROUPS[gi]) return;
+    const colorInp = card.querySelector('input[data-field="color"]');
+    const labelInp = card.querySelector('input[data-field="label"]');
+    if (colorInp) FILTER_GROUPS[gi].color = colorInp.value;
+    if (labelInp) FILTER_GROUPS[gi].label = labelInp.value.toUpperCase();
+
+    const rows = card.querySelectorAll('[data-bi]');
+    rows.forEach(row => {
+      const bi = parseInt(row.dataset.bi);
+      if (!FILTER_GROUPS[gi].brands[bi]) return;
+      const keyInp = row.querySelector('input[data-field="key"]');
+      const brandLabelInp = row.querySelector('input[data-field="brandLabel"]');
+      if (keyInp) FILTER_GROUPS[gi].brands[bi].key = keyInp.value.trim().toUpperCase();
+      if (brandLabelInp) FILTER_GROUPS[gi].brands[bi].label = brandLabelInp.value.trim();
+    });
+  });
+  buildFilters();
+  render();
+  closeModalById('filtrosModal');
+  showToast('✅ Filtros guardados · Exporta el JSON cuando estes listo');
+}
+
+function agregarGrupo() {
+  FILTER_GROUPS.push({ label: 'NUEVO GRUPO', color: '#f5a623', brands: [] });
+  renderFiltrosPanel();
 }
 
 // ---- INICIO DE LA APLICACIÓN ---- (lanzado por initDB)
