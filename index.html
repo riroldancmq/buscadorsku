@@ -1441,6 +1441,13 @@ function openDetail(idx) {
               <div class="paleta-legend-val">${p.packsPaleta}</div>
             </div>
           </div>` : ''}
+          ${p.pesoPaleta ? `<div class="paleta-legend-item">
+            <div class="paleta-legend-dot" style="background:#e8b923"></div>
+            <div>
+              <div style="font-size:14px">Peso paleta</div>
+              <div class="paleta-legend-val">${p.pesoPaleta} kg</div>
+            </div>
+          </div>` : ''}
         </div>
       </div>`;
   } else {
