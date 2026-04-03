@@ -212,7 +212,7 @@
       "pisos": 7,
       "packsPiso": 26,
       "packsPaleta": 182,
-      "pesoPaleta": 1.043
+      "pesoPaleta": 1.215
     },
     {
       "sku": "871",
@@ -552,7 +552,7 @@
       "pisos": 5,
       "packsPiso": 28,
       "packsPaleta": 140,
-      "pesoPaleta": 1.34
+      "pesoPaleta": 1.232
     },
     {
       "sku": "2.439",
@@ -1127,7 +1127,7 @@
       "pisos": 7,
       "packsPiso": 29,
       "packsPaleta": 203,
-      "pesoPaleta": 1.215
+      "pesoPaleta": 1.243
     },
     {
       "sku": "14.938",
@@ -1398,8 +1398,7 @@
       "desc": "ECO DE LOS ANDES SG PET X6 1000 PR 165 P",
       "pisos": 6,
       "packsPiso": 33,
-      "packsPaleta": 198,
-      "pesoPaleta": 1.147
+      "packsPaleta": 198
     },
     {
       "sku": "17.358",
@@ -1447,7 +1446,7 @@
       "pisos": 6,
       "packsPiso": 10,
       "packsPaleta": 60,
-      "pesoPaleta": 1.215
+      "pesoPaleta": 1.243
     },
     {
       "sku": "17.932",
@@ -1511,7 +1510,7 @@
       "pisos": 7,
       "packsPiso": 29,
       "packsPaleta": 203,
-      "pesoPaleta": 1.043
+      "pesoPaleta": 1.215
     },
     {
       "sku": "18.354",
@@ -1655,7 +1654,7 @@
       "pisos": 3,
       "packsPiso": 24,
       "packsPaleta": 72,
-      "pesoPaleta": 913.0
+      "pesoPaleta": 0.913
     },
     {
       "sku": "18.746",
@@ -1663,7 +1662,7 @@
       "pisos": 4,
       "packsPiso": 24,
       "packsPaleta": 96,
-      "pesoPaleta": 913.0
+      "pesoPaleta": 0.913
     },
     {
       "sku": "19.019",
@@ -2062,7 +2061,7 @@
       "pisos": 7,
       "packsPiso": 25,
       "packsPaleta": 175,
-      "pesoPaleta": 1.215
+      "pesoPaleta": 1.243
     },
     {
       "sku": "21.680",
@@ -2310,7 +2309,7 @@
       "pisos": 4,
       "packsPiso": 15,
       "packsPaleta": 60,
-      "pesoPaleta": 1.34
+      "pesoPaleta": 1.28
     },
     {
       "sku": "21.984",
@@ -2373,16 +2372,14 @@
       "desc": "GLACIAR SG PET X6 750 222 PC",
       "pisos": 6,
       "packsPiso": 37,
-      "packsPaleta": 222,
-      "pesoPaleta": 1.232
+      "packsPaleta": 222
     },
     {
       "sku": "22.185",
       "desc": "GLA SG X6 750PC",
       "pisos": 6,
       "packsPiso": 37,
-      "packsPaleta": 222,
-      "pesoPaleta": 1.232
+      "packsPaleta": 222
     },
     {
       "sku": "22.256",
@@ -2429,8 +2426,7 @@
       "desc": "ECO DE LOS ANDES SG PET X6 1000 - 192 PC",
       "pisos": 6,
       "packsPiso": 32,
-      "packsPaleta": 192,
-      "pesoPaleta": 1.147
+      "packsPaleta": 192
     },
     {
       "sku": "22.319",
@@ -4510,7 +4506,7 @@
       "pisos": 4,
       "packsPiso": 24,
       "packsPaleta": 96,
-      "pesoPaleta": 913.0
+      "pesoPaleta": 0.913
     },
     {
       "sku": "26.429",
@@ -4977,16 +4973,14 @@
       "desc": "GLACIAR+DEFENSE PET X6 750CC",
       "pisos": 6,
       "packsPiso": 37,
-      "packsPaleta": 222,
-      "pesoPaleta": 1.086
+      "packsPaleta": 222
     },
     {
       "sku": "27.779",
       "desc": "GLACIAR+VITALITY PET X6 750CC",
       "pisos": 6,
       "packsPiso": 37,
-      "packsPaleta": 222,
-      "pesoPaleta": 1.086
+      "packsPaleta": 222
     },
     {
       "sku": "27.793",
@@ -5277,8 +5271,7 @@
       "desc": "GLACIAR+PACK MIXTO VIT-DEF PET X6 750CC",
       "pisos": 6,
       "packsPiso": 37,
-      "packsPaleta": 222,
-      "pesoPaleta": 1.086
+      "packsPaleta": 222
     },
     {
       "sku": "28.634",
