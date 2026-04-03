@@ -496,7 +496,7 @@
       "pisos": 5,
       "packsPiso": 22,
       "packsPaleta": 110,
-      "pesoPaleta": 1.29
+      "pesoPaleta": 1.147
     },
     {
       "sku": "2.110",
@@ -512,15 +512,15 @@
       "pisos": 10,
       "packsPiso": 10,
       "packsPaleta": 100,
-      "pesoPaleta": 1.203
+      "pesoPaleta": 1.249
     },
     {
       "sku": "2.201",
-      "desc": "QUILMES x6 473cc",
+      "desc": "1/2 LATA QUILMES  6 U",
       "pisos": 10,
       "packsPiso": 40,
       "packsPaleta": 400,
-      "pesoPaleta": 1.203
+      "pesoPaleta": 1.249
     },
     {
       "sku": "2.202",
@@ -540,11 +540,11 @@
     },
     {
       "sku": "2.218",
-      "desc": "QUILMES 4x6 473cc",
+      "desc": "1/2 LATA QUILMES",
       "pisos": 10,
       "packsPiso": 10,
       "packsPaleta": 100,
-      "pesoPaleta": 1.203
+      "pesoPaleta": 1.249
     },
     {
       "sku": "2.428",
@@ -759,7 +759,7 @@
       "pisos": 10,
       "packsPiso": 10,
       "packsPaleta": 100,
-      "pesoPaleta": 1.203
+      "pesoPaleta": 1.249
     },
     {
       "sku": "7.651",
@@ -767,7 +767,7 @@
       "pisos": 10,
       "packsPiso": 40,
       "packsPaleta": 400,
-      "pesoPaleta": 1.203
+      "pesoPaleta": 1.249
     },
     {
       "sku": "7.707",
@@ -1119,7 +1119,7 @@
       "pisos": 7,
       "packsPiso": 29,
       "packsPaleta": 203,
-      "pesoPaleta": 1.203
+      "pesoPaleta": 1.215
     },
     {
       "sku": "14.934",
